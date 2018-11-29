@@ -17,6 +17,29 @@
 
 </div>
 <script>
+  const data = {
+    "student": "Асадулаги Мир-Амаль Миррашидович",
+    "object": "Русский язык",
+    "passes": [
+      {
+        "N": 5,
+        "date": "2018-09-17T00:00:00.000Z",
+        "topic": "Сжатый пересказ (Изложение).  Развитие речи.",
+        "homework": "Изложение",
+        "control": "Ур.",
+        "teacher": "Быкова Елена Николаевна"
+      },
+      {
+        "N": 6,
+        "date": "2018-09-17T00:00:00.000Z",
+        "topic": "Орфограммы в корнях слов. Повторительно-обобщающий урок.",
+        "homework": "Карточки",
+        "control": "Тест",
+        "teacher": "Быкова Елена Николаевна"
+      }
+    ]
+  }
+
   let wb = XLSX.utils.book_new();
   wb.Props = {
     Title: "SheetJS Tutorial",
@@ -25,7 +48,7 @@
     CreatedDate: new Date(Date.now())
   };
   wb.SheetNames.push('Test');
-  let ws_data = [['hello', 'world']];
+  let ws_data = converToArray(data);
   let ws = XLSX.utils.aoa_to_sheet(ws_data);
   wb.Sheets['Test'] = ws;
 
@@ -41,8 +64,20 @@
     return buf;
   }
 
-  $('#button-a').click(function(){
-    saveAs(new Blob([s2ab(wbOut)],{type:"application/octet-stream"}), 'test.xlsx')
+  function converToArray(data) {
+
+    let ws_data = [
+      ['', '', '', '', data.student],
+      ['', '', '', '', data.object],
+      ['N', 'date', 'topic', 'homework', 'control', 'teacher'],
+      [data.passes[0].N, data.passes[0].date, data.passes[0].topic, data.passes[0].homework, data.passes[0].control, data.passes[0].teacher],
+      [data.passes[1].N, data.passes[1].date, data.passes[1].topic, data.passes[1].homework, data.passes[1].control, data.passes[1].teacher],
+    ];
+    return ws_data
+  }
+
+  $('#button-a').click(function () {
+    saveAs(new Blob([s2ab(wbOut)], { type: "application/octet-stream" }), 'test.xlsx')
   });
 
 </script>
