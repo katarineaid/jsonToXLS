@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <!--<script src = "jquery-2.1.4.js"></script> -->
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script lang="javascript" src="xlsx.full.min.js"></script>
+  <script lang="javascript" src="FileSaver.js"></script>
+</head>
+<body>
+
+<div id="navbar"></div>
+<div id="wrapper">
+
+  <button id="button-a">Создать EXCEL</button>
+
+</div>
+<script>
+  let wb = XLSX.utils.book_new();
+  wb.Props = {
+    Title: "SheetJS Tutorial",
+    Subject: "Test file",
+    Author: "Red Stapler",
+    CreatedDate: new Date(Date.now())
+  };
+  wb.SheetNames.push('Test');
+  let ws_data = [['hello', 'world']];
+  let ws = XLSX.utils.aoa_to_sheet(ws_data);
+  wb.Sheets['Test'] = ws;
+
+
+  let wbOut = XLSX.write(wb, { bookType: 'xlsx', type: 'binary' })
+
+  function s2ab(s) {
+    let buf = new ArrayBuffer(s.length);
+    let view = new Uint8Array(buf);
+    for (let i = 0; i < s.length; i++) {
+      view[i] = s.charCodeAt(i) & 0xFF
+    }
+    return buf;
+  }
+
+  $('#button-a').click(function(){
+    saveAs(new Blob([s2ab(wbOut)],{type:"application/octet-stream"}), 'test.xlsx')
+  });
+
+</script>
+</body>
+</html>
